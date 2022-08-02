@@ -37,7 +37,7 @@ class App(QWidget):
 			self._animations = anims
 
 		with open('./data/drawings.json') as json_file:
-			f = json.load(json_file)
+			f = json.load(json_file) 
 			self._drawings = f
 
 		# Canvas size
@@ -487,6 +487,8 @@ class App(QWidget):
 		with open('./data/drawings.json', 'w') as outfile:
 			json.dump(self._drawings, outfile)
 
+		self.myRobot.robot.robotConnector.RTDE.close()
+
 
 	def manageAnimButtons(self, enable):
 		if enable:
@@ -534,7 +536,6 @@ class App(QWidget):
 		self.manageAnimButtons(enable=False)
 		self.selectedAnimText = "no"
 		self.on_click_play_animation()
-
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)

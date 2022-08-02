@@ -48,7 +48,6 @@ class MyRobot(URBasic.urScriptExt.UrScriptExt):
 		self.canvasCroppedHeight = 0
 		self.xShift = 0
 		self.zHover = 0
-
 		# Save each recorded calibrated point into this class
 		with open('./data/calibration_points.json') as json_file:
 			points = json.load(json_file)
@@ -88,7 +87,7 @@ class MyRobot(URBasic.urScriptExt.UrScriptExt):
 		p1 = np.array(self.bottomLeftPoint)
 		p2 = np.array(self.bottomRightPoint)
 		p3 = np.array(self.topLeftPoint)
-		# print p1,p2,p3
+		#print (f"p123 {p1, p2, p3}")
 		v1 = p3 - p1
 		v2 = p2 - p1
 		cp = np.cross(v1, v2)
