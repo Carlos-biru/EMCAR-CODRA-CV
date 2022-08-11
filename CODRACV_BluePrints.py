@@ -107,7 +107,7 @@ def findRoom(x,y):
             return 7
     
 #13 steps
-i = 1
+i = 2
 maxIter = 13
 script = ["retreat", "wander", "room", "room", "wander", "room", "room",
           "wander", "room", "room", "wander", "room", "retreat"]
@@ -115,7 +115,7 @@ script = ["retreat", "wander", "room", "room", "wander", "room", "room",
 roomDrawings = ["BP1","BP2","BP3","BP4","BP5","BP6","BP7"]
 roomsPainted = np.zeros(1)
 
-cond = 1
+cond = 2
 # i = iteration;  cond = condition;  fingers = f data; R = robot
 #   
 def interact(i, cond, fingers , R):
@@ -151,7 +151,7 @@ def drawRandRoom(R):
         room = randint(1,7)        
 
     playDrawing(R,roomDrawings[room-1])
-    np.append(roomsPainted, room)
+    roomsPainted = np.append(roomsPainted, room)
     
 def drawCond1(R, HandOnRoom):
     global roomsPainted
@@ -178,12 +178,12 @@ def drawCond1(R, HandOnRoom):
         if np.in1d(roomsPainted, [1,2,3,5,6,7]):
             room = 4
         else:
-            room = rand(1,7)
+            room = randint(1,7)
             while(room ==  4 or room in roomsPainted):
                 room = rand(1,7)
 
     playDrawing(R,roomDrawings[room-1])
-    np.append(roomsPainted, room)
+    roomsPainted = np.append(roomsPainted, room)
     
 def drawCond2(R,HandOnRoom):
     global roomsPainted
@@ -193,7 +193,7 @@ def drawCond2(R,HandOnRoom):
         drawRandRoom(R)
     else:   
         playDrawing(R,roomDrawings[HandOnRoom-1])
-        np.append(roomsPainted, HandOnRoom)
+        roomsPainted = np.append(roomsPainted, HandOnRoom)
         
 def playDrawing(R, drawing):
     print(f"Play Drawing {drawing}")
@@ -216,16 +216,22 @@ if __name__ == '__main__':
     thread1 = Thread( target=threadCV, args=("Thread-CV", queue) )
     thread1.start()
     
-    
     app = QApplication(sys.argv)
     R = CODRACVTest.App()
+
+    #clear buffer
+    queue.get(timeout = 1) # finger data
+    time.sleep(0.5)
+    f = queue.get(timeout = 1)
+
 
     while thread1.is_alive() and i < 4:
         try:
             queue.get(timeout = 1) # finger data
-            time.sleep(0.2)
-            f = queue.get()
+            time.sleep(0.5)
+            f = queue.get(timeout = 1)
             queue.put([-1,-1]) #fill the cue so is not updated
+            print(f"Index position {f[1]}")
         except Empty as error:
             break
         interact(i, cond, f, R)
