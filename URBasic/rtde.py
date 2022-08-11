@@ -543,6 +543,8 @@ class RTDE(threading.Thread): #, metaclass=Singleton
                 self._logger.error('RTDE_CONTROL_PACKAGE_SETUP_INPUTS: No payload')
                 return None
             has_recipe_id = True
+
+
             input_config = RTDE_IO_Config.unpack_recipe(payload, has_recipe_id)
             return input_config
 

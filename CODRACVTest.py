@@ -25,9 +25,9 @@ class App(QWidget):
         self.settings = QSettings("RoboApp", "App")
 
         
-        self.wWidth = 1280#1920#1200
-        self.wHeight = 720#1080#860
-        self.canvasW = 1280#self.settings.value("width") or 1920 #2560
+        self.wWidth = 1200#1200
+        self.wHeight = 860#720#1080#860
+        self.canvasW = 1080#1280#self.settings.value("width") or 1920 #2560
         self.canvasH = 720#self.settings.value("height") or 1080 #1440
 
         
@@ -35,6 +35,11 @@ class App(QWidget):
         			anims = json.load(json_file)
         			self._animations = anims
         global animationssss
+        
+        
+        with open('./data/drawings.json') as json_file:
+            f = json.load(json_file) 
+            self._drawings = f
 
         
 		#self.myRobot = False
@@ -55,7 +60,8 @@ class App(QWidget):
 
         animationssss = anims
         self.myRobot = MyRobot(app = self, host = '192.168.1.100')
-        
+        self.myRobot.SetZvals(float(self.settings.value("z_offset") or 0), division=100) #0.04)
+
         self.myRobot.constructDrawingCanvas()
         self.myRobot.calculateCroppedSizing(self.canvasH, self.canvasW)
 

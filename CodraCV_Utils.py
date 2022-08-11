@@ -152,7 +152,7 @@ def pixRaw2Warp(pX,pY, matrix):
         return [-1,-1]
     # Transformation
     pT = getPixTransf(pX,pY,matrix)
-    print(pT)
+    #print(pT)
     # If is among  
     if(pT[0] > -100 and pT[0] < width+100 and pT[1] > -100 and pT[1] <height+100):
         return np.clip(pT, [0,0], [width,height])

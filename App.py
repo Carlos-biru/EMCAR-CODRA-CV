@@ -41,8 +41,9 @@ class App(QWidget):
 			self._drawings = f
 
 		# Canvas size
-		self.canvasW = self.settings.value("width") or 1920 #2560
-		self.canvasH = self.settings.value("height") or 1080 #1440
+		self.canvasW = self.settings.value("width") or 1080 #2560
+		self.canvasH = self.settings.value("height") or 720 #1440
+		print(f"CanvasW, canvasH {self.canvasW, self.canvasH}")
 		self.remotePos = "X: not received | Y: not received"
 		self.tabletPos = "X: not received | Y: not received"
 

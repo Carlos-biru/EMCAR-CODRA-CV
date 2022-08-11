@@ -42,8 +42,12 @@ class WindowDraw(QWidget):
             pen_y = tabletEvent.globalY()
 
             #Re-map the tablet resolution
-            mX = interp1d([0,2560],[0,self.mainWindow.canvasW])
-            mY = interp1d([0,1440],[0,self.mainWindow.canvasH])
+            #This resolution have to match the Res of your display
+            mX = interp1d([0,1920],[0,self.mainWindow.canvasW])
+            mY = interp1d([0,1200],[0,self.mainWindow.canvasH])
+            
+            #mX = interp1d([0,2560],[0,self.mainWindow.canvasW])
+            #mY = interp1d([0,1440],[0,self.mainWindow.canvasH])
 
             x =  mX(pen_x)
             y = mY(pen_y)

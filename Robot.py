@@ -385,12 +385,14 @@ class MyRobot(URBasic.urScriptExt.UrScriptExt):
 			tabletData = True
 
 		if tabletData is True:
-			[initX,initY, hover] = animationPose[0]
+			[initX,initY, hover] = animationPose[10]
 			poseIn3D = self.PixelTranslation(initX, initY, canvasH, canvasW)
-			# initTargetPose = [poseIn3D[0], poseIn3D[1], poseIn3D[2], 0,3.14,0]
+			initTargetPose = [poseIn3D[0], poseIn3D[1], poseIn3D[2], 0,3.14,0]
+			initTargetPose[2] -= 0.11 # adding the legth of the tool
 
-			# self.ExecuteSingleLinear(initTargetPose)
-			self.ExecuteSingleLinearJoint(self.initTargetDrawPose, a=0.2, v=0.4)
+			#self.ExecuteSingleLinearJoint(self.initTargetDrawPose, a=0.25, v=0.4)
+			self.ExecuteSingleLinear(initTargetPose, a=0.15, v=0.1)
+
 
 			self.robot.init_realtime_control_pose()
 		else:

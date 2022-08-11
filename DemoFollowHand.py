@@ -23,8 +23,8 @@ def threadRobot(name , q):
             print(f"INDEX  {posOfIndex(a)}")
             #Translate position to Canvas WS different pix order
             x1, y1 = translateCVPix2Canvas(a[1][0], a[1][1])
-            R.drawPointFN(x1,y1)
-            #R.drawRTDE(x1,y1)
+            #R.drawPointFN(x1,y1)
+            R.drawRTDE(x1,y1)
         else:
             time.sleep(0.2)
         q.get()
