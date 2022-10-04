@@ -14,7 +14,7 @@ width, height = 1280,720
 conf = auxConf.readJson()
 corn = conf["corners"]
 p1,p2,p3,p4 = corn["TL"] ,corn["BL"] , corn["BR"] , corn["TR"]
-p= (p1,p2,p3,p4)
+p = (p1,p2,p3,p4)
 p = np.asarray(p)
 
 
@@ -26,11 +26,13 @@ def loadCamera():
     
     return PyK4A(
         Config(
-        color_resolution=pyk4a.ColorResolution.RES_720P,
+        color_resolution=pyk4a.ColorResolution.RES_1440P,
+        #color_resolution=pyk4a.ColorResolution.RES_720P,
         #color_resolution=pyk4a.ColorResolution.RES_2160P,
-
+        
         depth_mode=pyk4a.DepthMode.NFOV_UNBINNED,
         synchronized_images_only=True,
+
         ))    
 
 # Return the matrix of perspective from the given points
@@ -38,22 +40,32 @@ def loadCamera():
 def getPerspectiveMatrix():
     warpP = np.float32([[0,0] , [0,height] , [width, height],  [width, 0]])
     matrix = cv2.getPerspectiveTransform(np.float32(p),warpP)
-    print(matrix)
+    #print(matrix)
     return matrix
 
 # Returns a image
 #
 def getImg(k4a):
     capture = k4a.get_capture()
+    #capture = cv2.resize(capture,(width,height))
     #return capture.depth
     #return capture.transformed_depth
+    return cv2.resize(capture.color,(width,height))
+
+# Returns a Image in full resolution 2160
+#
+def getImgFull(k4a):
+    capture = k4a.get_capture()
     return capture.color
 
+# Returns
+#
 
 # Returns a depth image U8, each bit is 4mm
 # Clip the data between 52cm and 106cm then divide it by 2 ( 255 values)
 def getImgArr(k4a):
     img = k4a.get_capture().transformed_depth
+    img = cv2.resize(img,(width,height))
     imgClip = np.clip(img, 525, 1065)
     imgComp = (imgClip-525)/2
     imgU8 = imgComp.astype('uint8')
@@ -83,6 +95,16 @@ def getFg(bg, img, th1 = 200, th2 = 2):
 def warpImg(img, matrix):
     return cv2.warpPerspective(img, matrix, (width, height))
 
+# Warp image from a high resolution img
+# Map the points to the new resolution and warp the img
+def warpImgFull(img):
+    h1,w1 = img.shape[0:2]
+    p1 = (p*[w1,h1])/[width,height]
+    warpP1 = np.float32([[0,0] , [0,h1] , [w1, h1],  [w1, 0]])
+    matrix1 = cv2.getPerspectiveTransform(np.float32(p1),warpP1)    
+    canvas = cv2.warpPerspective(img, matrix1, (w1, h1))
+    return cv2.resize(canvas, (width,height))
+
 # Get foreground over paper
 # capture -> arrange -> get fg -> morphology -> mask
 def getFgMask(k4a,bg):
@@ -90,8 +112,6 @@ def getFgMask(k4a,bg):
     depthFg     = getFg(bg,depth)     
     mask = morf(depthFg)
     return mask
-
-
 
 # Add FPS
 # params, img and previous time
@@ -103,7 +123,18 @@ def addFPS(img,pTime):
     cv2.putText(img,str(int(fps)), (10,70), cv2.FONT_HERSHEY_PLAIN, 3, (255,0,255), 3)
     return img, pTime
 
-
+# Add a square over the image from the points saved in the config.json
+def paintSquare(img):
+    #conf = auxConf.readJson()
+    #corn = conf["corners"]
+    #p1,p2,p3,p4 = corn["TL"] ,corn["BL"] , corn["BR"] , corn["TR"]
+    #p= (p1,p2,p3,p4)
+    #points = np.asarray(p)
+    for i in range(p.shape[0]):
+        cv2.line(img, p[i], p[i-1],(0,255,0), 3)
+    for i in range(p.shape[0]):
+        cv2.circle(img, p [i],5,(0,0,255),-1)
+    return img
 
 
 ##############    Hand Detection   #############

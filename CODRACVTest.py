@@ -27,7 +27,7 @@ class App(QWidget):
         
         self.wWidth = 1200#1200
         self.wHeight = 860#720#1080#860
-        self.canvasW = 1080#1280#self.settings.value("width") or 1920 #2560
+        self.canvasW = 1280#1280#self.settings.value("width") or 1920 #2560
         self.canvasH = 720#self.settings.value("height") or 1080 #1440
 
         

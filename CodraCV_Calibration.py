@@ -215,7 +215,7 @@ if __name__ == "__main__":
         if op == "B":
            calibrateDepthBG() 
 
-
+#add close the K4a
 
 
 import sys
