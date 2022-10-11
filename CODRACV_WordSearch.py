@@ -19,24 +19,28 @@ maxDrawings = 6
 script = ["retreat", "wander", "draw", "draw", "wander", "draw", "draw",
           "wander", "draw", "draw", "retreat"]
 
-roomDrawings = ["SP1","SP2","SP3","SP4","SP5","SP6","SP7","SP8,",
-                "SP9","SP10","SP11","SP12"]
-roomsPainted = np.zeros(0)
-cond = 1
+roomDrawings = ["WS1","WS2","WS3","WS4","WS5","WS6","WS7","WS8","WS9","WS10",
+                "WS11","WS12", "WS13", "WS14", "WS15", "WS16"]
+wordsMarked = np.zeros(0)
 
+wordsInRoom1 = [1,2,3,4,5,6,9]
+wordsInRoom2 = [7,8]
+wordsInRoom3 = [10,11,12,13,14]
+wordsInRoom4 = [15,16]
+wordsInRoom = [wordsInRoom1,wordsInRoom2,wordsInRoom3,wordsInRoom4]
 def interact(i, cond, fingers , R):
     global script
     
     if script[i] == "retreat":
         print("Retreat")
-        #playAnim(R,"retreat")
+        playAnim(R,"retreat")
     
     elif script[i] == "wander":
         print("Wander")
         #playAnim(R,"wander")
         
     elif script[i] == "draw":
-        r = getHandOnRoom(fingers)
+        r = gethandOnRoom(fingers)
         #print(f"Hand on Room {r}")
         if r == -1 :    # Random room
             drawRandRoom(R)
@@ -48,61 +52,62 @@ def interact(i, cond, fingers , R):
 
 
 def drawRandRoom(R):
-    global roomsPainted
+    global wordsMarked
     print("Draw Random")
-    if(roomsPainted.size == maxDrawings):
+    if(wordsMarked.size == maxDrawings):
         print("Already max drawings")
         return -1
-    room2paint = randint(1,12)        
-    while room2paint in roomsPainted:
-        print(room2paint)
-        room2paint = randint(1,maxDrawings)        
+    word2mark = randint(1,16)        
+    while word2mark in wordsMarked:
+        print(word2mark)
+        word2mark = randint(1,maxDrawings)        
 
-    playDrawing(R,roomDrawings[room2paint-1])
-    roomsPainted = np.append(roomsPainted, room2paint)
+    playDrawing(R,roomDrawings[word2mark-1])
+    wordsMarked = np.append(wordsMarked, word2mark)
     
-def drawCond1(R, HandOnRoom):#, redInRoom):
-    global roomsPainted
-    if(roomsPainted.size == maxDrawings):
+    
+def drawCond1(R, handOnRoom):#, redInRoom):
+    global wordsMarked
+    if(wordsMarked.size == maxDrawings):
         print("Already Max drawings")
         return -1
-    print(f"drawCond1 hand on  {HandOnRoom}")
-    if -1 < HandOnRoom <= 12:
-        # left columns
-        if HandOnRoom in [1,2,5,6,9,10] :
-            print("Hand on left side")
-            room2paint = randint(1,12)
-            while ((room2paint in roomsPainted) or (room2paint in[1,2,5,6,9,10])) :
-                room2paint = randint(1,12)
-        # Right columns
-        elif HandOnRoom in [3,4,7,8,11,12]:
-            print("Hand on right side")
-            room2paint = randint(1,12)
-            while ((room2paint in roomsPainted) or (room2paint in  [3,4,7,8,11,12] )) :
-                room2paint = randint(1,12)
-                
-     
+    print(f"drawCond1 hand on  {handOnRoom}")
+    if -1 < handOnRoom <= 4:
+        word2mark = randint(1,16)
+        # if the word is the words inside the room the hand is over repeat the rand 
+        while ((word2mark in wordsMarked) or (word2mark in wordsInRoom[handOnRoom-1])) :
+            word2mark = randint(1,16)
 
-    playDrawing(R,roomDrawings[room2paint-1])
-    roomsPainted = np.append(roomsPainted, room2paint)
+    playDrawing(R,roomDrawings[word2mark-1])
+    wordsMarked = np.append(wordsMarked, word2mark)
     
-def drawCond2(R,HandOnRoom):#, redInRoom):
-    global roomsPainted
-    if(roomsPainted.size == maxDrawings): return -1
     
-    if HandOnRoom in roomsPainted :
+def drawCond2(R,handOnRoom):#, redInRoom):
+    global wordsMarked
+    if(wordsMarked.size == maxDrawings): return -1
+    
+    #Check if there if there is still words in the room where the hand is
+    if False not in np.in1d(wordsInRoom[handOnRoom-1],wordsMarked) :
+        print(f"Room {handOnRoom} is done already lets go for a random")
         drawRandRoom(R)
-    else:   
-        playDrawing(R,roomDrawings[HandOnRoom-1])
-        roomsPainted = np.append(roomsPainted, HandOnRoom)
+    else:
+        word2mark = randint(1,16)
+        # if the word is in the words inside the room the hand is over 
+        while not ((word2mark not in wordsMarked) and  (word2mark in wordsInRoom[handOnRoom-1])) :
+            word2mark = randint(1,16)
+            
+        playDrawing(R,roomDrawings[word2mark-1])
+        wordsMarked = np.append(wordsMarked, word2mark)
         
 def playDrawing(R, drawing):
     print(f"Play Drawing {drawing}")
+    time.sleep(3)
+    '''
     R.end_freedrive()
     drawing = R._drawings[drawing]
     result = R.myRobot.playAnimation(drawing)
     print(result)
-    
+    '''
 def playAnim(R, anim):
     print(f"Play Animation {anim}")
     R.end_freedrive()
@@ -112,7 +117,7 @@ def playAnim(R, anim):
 
 
 
-def getHandOnRoom(f):
+def gethandOnRoom(f):
     if checkGoodFingers(f):
         return findRoom(f[1,0],f[1,1])
     else:
@@ -122,22 +127,17 @@ def findRoom(x,y):
     w,h = 1280, 720    
     if x == -1:
         print(f"no room")
-        return -1
-    
-    #W divided in 4
-    #H divided in 3
-    roomXPos = 0
-    roomYPos = 0
-    for dw in range(4):
-        if  x < w*(dw+1)/4:
-            roomXPos = dw
-            break
-    for dh in range(3):
-        if y < h*(dh+1)/3:
-            roomYPos = dh
-            break
-    print(f"Hand on Room {roomYPos*4 + roomXPos + 1}")
-    return roomYPos*4 + roomXPos + 1
+        return -1    
+    #Divided in 4 rooms, 1->top left, 2->bottom left, 3->top right, 4-> bottom right
+    #W divided in 14/30 
+    #H divided in 13/21
+    room = 1    
+    if x > w*(14/30): # right column 
+        room += 2
+    if y > h*(13/21): # bottom line
+        room += 1
+    print(f"Hand on Room {room}")
+    return room
   
 def findRoomDraw(img):
     h1,w1 = img.shape
@@ -185,6 +185,7 @@ def threadCV(name, q,qImg):
 
 
 
+cond = 1
 
 
 if __name__ == '__main__':

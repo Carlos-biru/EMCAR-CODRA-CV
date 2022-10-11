@@ -33,7 +33,7 @@ class handDetector():
     def detectHands(self):
         # RGB img for reference
         img, self.time = utils.addFPS(utils.getImg(self.k4a), self.time)
-        cv2.imshow("pic",img)
+        #cv2.imshow("pic",img)
         # to inprove FPS, we need to pass the capture instead K4a
         
         # Mask FG from depth               
@@ -51,10 +51,12 @@ class handDetector():
         
         forHandWSquare = utils.paintSquare(forHand)
         cv2.imshow("Image", forHandWSquare)
-        cv2.imshow("warp and fingers",warpWFing)
+        #cv2.imshow("warp and fingers",warpWFing)
         
         self.fingers = fingersWarp
-        
+    
+    # Updates the drawing 
+    
     def detectDrawing(self):
         
         # Get color img + HSV
@@ -64,7 +66,7 @@ class handDetector():
         canvasHSV = cv2.resize(utils.warpImgFull(imgHSV),(self.w,self.h))
         # Get red drawing
         self.getRedColorWithDepthMask(canvasHSV)
-        cv2.imshow("HSV",canvasHSV)
+        #cv2.imshow("HSV",canvasHSV)
         cv2.imshow("AVG", self.redLinesImgAVG)
     
     # Extract the red lines from a given image
