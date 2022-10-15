@@ -37,7 +37,7 @@ def interact(i, cond, fingers , R):
     
     elif script[i] == "wander":
         print("Wander")
-        #playAnim(R,"wander")
+        playAnim(R,"wander")
         
     elif script[i] == "draw":
         r = gethandOnRoom(fingers)
@@ -102,12 +102,12 @@ def drawCond2(R,handOnRoom):#, redInRoom):
 def playDrawing(R, drawing):
     print(f"Play Drawing {drawing}")
     time.sleep(3)
-    '''
+    
     R.end_freedrive()
     drawing = R._drawings[drawing]
     result = R.myRobot.playAnimation(drawing)
     print(result)
-    '''
+    
 def playAnim(R, anim):
     print(f"Play Animation {anim}")
     R.end_freedrive()
@@ -185,7 +185,7 @@ def threadCV(name, q,qImg):
 
 
 
-cond = 1
+cond = 2
 
 
 if __name__ == '__main__':

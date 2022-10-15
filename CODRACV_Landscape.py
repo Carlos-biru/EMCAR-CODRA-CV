@@ -13,16 +13,16 @@ import numpy as np
 from random import randint
 
 
-i = 2
+i = 0
 maxIter = 11
-maxDrawings = 6 
+maxDrawings = 4 
 script = ["retreat", "wander", "draw", "draw", "wander", "draw", "draw",
           "wander", "draw", "draw", "retreat"]
 
 roomDrawings = ["SP1","SP2","SP3","SP4","SP5","SP6","SP7","SP8,",
                 "SP9","SP10","SP11","SP12"]
 roomsPainted = np.zeros(0)
-cond = 1
+cond = 2
 
 def interact(i, cond, fingers , R):
     global script

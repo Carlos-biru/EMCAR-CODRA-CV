@@ -113,7 +113,6 @@ script = ["retreat", "wander", "room", "room", "wander", "room", "room",
 roomDrawings = ["BP1","BP2","BP3","BP4","BP5","BP6","BP7"]
 roomsPainted = np.zeros(1)
 
-cond = 1
 # i = iteration;  cond = condition;  fingers = f data; R = robot
 #   
 def interact(i, cond, fingers , R):
@@ -208,6 +207,7 @@ def playAnim(R, anim):
     result = R.myRobot.playAnimation(animation)
     print(result)
 
+cond = 2
 
 if __name__ == '__main__':
     

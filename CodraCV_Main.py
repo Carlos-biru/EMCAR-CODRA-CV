@@ -66,7 +66,7 @@ class handDetector():
         canvasHSV = cv2.resize(utils.warpImgFull(imgHSV),(self.w,self.h))
         # Get red drawing
         self.getRedColorWithDepthMask(canvasHSV)
-        #cv2.imshow("HSV",canvasHSV)
+        cv2.imshow("HSV",canvasHSV)
         cv2.imshow("AVG", self.redLinesImgAVG)
     
     # Extract the red lines from a given image
