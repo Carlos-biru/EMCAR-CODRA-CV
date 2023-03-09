@@ -97,7 +97,7 @@ To make it easier you can create your own buttons on App.py to launch one or mor
 
 
 
-# CODRA - CV Colaborative Drawing assisted by Computer Vision
+# CODRA - CV Colaborative Drawing assisted by Computer Vision -
 
 This a spin off EMCAR, that allow to automate the interaction based on the position of the hand of the human and the drawing
 
