@@ -78,11 +78,19 @@ Click on Record Table, draw on it and clik again to save the drawing.
 
 You can use the R key when on the drawing window to start and finish the record.
 
-#### Adjusting resolutions:
+#### Adjusting Resolutions:
 The drawing is stored as a sucession of points (X,Y,pen touching). The X and Y are mapped to a resolution of 1280x720 and will be convert to robot positions when drawing.
 
 You need to provide EMCAR with the resolution of your monitor to do a correct mapping. In TabletWindow.py line 46 and 47 you must write the resolution of of the monitor, by default 1920x1200. If you change your monitor you need to repeat this. If is not set up correctly you can notice that either the robot gets out of the boundaries of the canvas or it can not reach part of it.
 
+## Saved Data
+
+The data of the animations and calibration is stored under the folder data. The active files are:
+- animations
+- drawings
+- calibration_points
+
+The files with _Experiment sufix are the ones used in the examples of CODRA-CV, you can change the names to the one listed to make them visible to the app.
 ## Conduct an interaction
 If you just start the app then click on Activate button.
 
@@ -99,9 +107,34 @@ To make it easier you can create your own buttons on App.py to launch one or mor
 
 # CODRA - CV Colaborative Drawing assisted by Computer Vision -
 
-This a spin off EMCAR, that allow to automate the interaction based on the position of the hand of the human and the drawing
+This a spin off EMCAR, that allows to automate the interaction based on the position of the hand of the human and the drawing using openCV.
 
 It uses a kinect azure camera and the library PyK4A.
 
 ## Calibration
-Run the script 
+Run the script CodraCV_Calibration.py and calibrate the corners of the canvas aswell as the depth background by removing the robot and items around the canvas. Now the 
+![CaptureCalibration](https://user-images.githubusercontent.com/69670188/224183126-80d52980-889c-421f-a4cb-81c754eade6f.PNG)
+
+
+## CODRACV_MAIN
+
+This script contains the main functionalities.
+- Find the fingers tips of the human
+- Find the drawing of the human ( when human draw in red and robot in green)
+
+![Capture_drawing](https://user-images.githubusercontent.com/69670188/224184286-201952b2-6d95-442e-9e3c-6a2f01f24676.PNG)
+![Capture_fingers](https://user-images.githubusercontent.com/69670188/224184714-1c49c474-03cc-4544-9331-59fd69a1fd7a.PNG)
+
+## Create your own interaction
+
+Using the information provided by Codracv_Main and the saved animatios using EMCAR you can create your own automated interactions. The following scripts are examples:
+- CODRACV_BluePrints
+- CODRACV_WordSearch
+- CODRACV_Landscape
+
+In this interactions the robot waits for the human to draw in a part of the canvas and then proceed to draw one of the prerecorded drawings close to the hand of the participant.
+Use them as templates. In the data folder rename the files with sufix _experiment to make their animations active.
+
+The script DemoFollowHand.py is an example that only uses the hand position and follows their index finger. Use it to troubleshoot that your canvas in the camera and robot are aligned. Use this script with discrection, you don't want your finger pierced.
+
+
