@@ -29,9 +29,9 @@ class App(QWidget):
 		self.settings = QSettings("RoboApp", "App")
 		self._images = {}
 
-		for file in os.listdir("drawings"):
-			if file.endswith(".jpg") or file.endswith(".png"):
-				self._images.update({file.split(".")[0]: os.path.join("drawings", file)})
+		#for file in os.listdir("drawings"):
+		#	if file.endswith(".jpg") or file.endswith(".png"):
+		#		self._images.update({file.split(".")[0]: os.path.join("drawings", file)})
 
 		with open('./data/animations.json') as json_file:
 			anims = json.load(json_file)
