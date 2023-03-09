@@ -55,8 +55,8 @@ class handDetector():
         
         self.fingers = fingersWarp
     
+
     # Updates the drawing 
-    
     def detectDrawing(self):
         
         # Get color img + HSV
@@ -66,16 +66,25 @@ class handDetector():
         canvasHSV = cv2.resize(utils.warpImgFull(imgHSV),(self.w,self.h))
         # Get red drawing
         self.getRedColorWithDepthMask(canvasHSV)
+        
+ 
+        
+        def mouse_callback(event, x, y, flags, params):
+            if event == 2:
+                print(f"coords {x, y}, H- {canvasHSV[y, x, 0]} , S- {canvasHSV[y, x, 1]}, V- {canvasHSV[y, x, 2]} ")
+        
+        cv2.namedWindow("AVG")
+        cv2.setMouseCallback("AVG", mouse_callback)   
         cv2.imshow("HSV",canvasHSV)
         cv2.imshow("AVG", self.redLinesImgAVG)
-    
+        
     # Extract the red lines from a given image
     # Expect a HSV input
     def getRedColor(self,img):
-        redLow1  = np.array([0,20,20], np.uint8)
-        redHigh1 = np.array([8,255,255],np.uint8)
-        redLow2  = np.array([150,20,20], np.uint8) 
-        redHigh2 = np.array([179,255,255],np.uint8)        
+        redLow1  = np.array([0,10,150], np.uint8)
+        redHigh1 = np.array([12,255,200],np.uint8)
+        redLow2  = np.array([125,10,150], np.uint8) 
+        redHigh2 = np.array([179,255,200],np.uint8)        
         
         maskR1 = cv2.inRange(img,redLow1,redHigh1)
         maskR2 = cv2.inRange(img,redLow2,redHigh2)
@@ -105,6 +114,8 @@ class handDetector():
         avgHidenUnder= cv2.bitwise_and(self.redLinesImgAVG,self.redLinesImgAVG,mask = mask)
         
         self.redLinesImgAVG = avgMinusMask + avgHidenUnder
+    
+    
     
 if __name__ == '__main__':
     try:

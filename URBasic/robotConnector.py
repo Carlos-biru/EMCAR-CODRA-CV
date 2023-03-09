@@ -51,8 +51,8 @@ class RobotConnector(object):
         self.RTDE = URBasic.rtde.RTDE(robotModel, conf_filename=conf_filename)
         self.DashboardClient = URBasic.dashboard.DashBoard(robotModel)
         self.ForceTourqe = None
-        # if hasForceTorque:
-        #     self.ForceTourqe = URplus.forceTorqueSensor.ForceTorqueSensor(robotModel)
+        #if hasForceTorque:
+        #    self.ForceTourqe = URplus.forceTorqueSensor.ForceTorqueSensor(robotModel)
 
         logger = URBasic.dataLogging.DataLogging()
         name = logger.AddEventLogging(__name__)

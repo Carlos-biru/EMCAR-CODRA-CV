@@ -722,6 +722,7 @@ end
         Return Value
         The force in Newtons (float)
         '''
+        print("you")
         if(wait):
             self.sync()
         return self.robotConnector.RobotModel.TcpForceScalar()

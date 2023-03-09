@@ -22,6 +22,7 @@ class App(QWidget):
 	def __init__(self):
 		super().__init__()
 		self.title = 'RoboUI'
+        # Size of the app window
 		self.wWidth = 1200
 		self.wHeight = 860
 
@@ -40,7 +41,7 @@ class App(QWidget):
 			f = json.load(json_file) 
 			self._drawings = f
 
-		# Canvas size
+		# Canvas size; of the drawing space (paper)
 		self.canvasW = self.settings.value("width") or 1280 #2560
 		self.canvasH = self.settings.value("height") or 720 #1440
 		print(f"CanvasW, canvasH {self.canvasW, self.canvasH}")
@@ -243,6 +244,12 @@ class App(QWidget):
 		self.myRobot.ExecuteSinglePath(nextPose)
 
 	def on_click_canvas_size(self):
+		
+		print("- - - - - -  Canvas Size  - - - - -")        
+		print("- Check in APP.py lines 45 and 46 to adjust the resolution of the paper, default 1280x720")
+		print("- Check in TabletWindow lines 46 and 47, and add the resolution of your monitor screen")        
+		print("- - - - - - - - - - - - - - - - - -")        
+		'''
 		i , ok = QInputDialog().getInt(self, "Set Width",
 								 "Width:")
 		if ok:
@@ -256,7 +263,7 @@ class App(QWidget):
 			self.label_h_val.setText("{}".format(i))
 			self.canvasH = i
 			self.settings.setValue("height", i)
-
+        '''
 	def on_click_z_offset(self):
 		d , ok = QInputDialog().getDouble(self, "Set Z Offset",
 								 "Z:", decimals=2)
@@ -316,7 +323,7 @@ class App(QWidget):
 	def record(self, progress_callback):
 		array = []
 		while self.isRecording:
-			time.sleep(0.115)
+			time.sleep(0.185)
 			pose = self.myRobot.robot.get_actual_joint_positions()
 			array.append(pose.tolist())
 		return array
@@ -338,7 +345,7 @@ class App(QWidget):
 	def recordTablet(self, progress_callback):
 		array = []
 		while self.isRecording:
-			time.sleep(0.1)
+			time.sleep(0.15)
 			pose = [self.window_draw.pen_x, self.window_draw.pen_y, self.window_draw.pen_pressure]
 			array.append(pose)
 		return array

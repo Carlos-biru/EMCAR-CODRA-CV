@@ -15,12 +15,17 @@ from random import randint
 
 i = 0
 maxIter = 11
-maxDrawings = 4 
+maxDrawings = 6 
 script = ["retreat", "wander", "draw", "draw", "wander", "draw", "draw",
           "wander", "draw", "draw", "retreat"]
 
-roomDrawings = ["SP1","SP2","SP3","SP4","SP5","SP6","SP7","SP8,",
-                "SP9","SP10","SP11","SP12"]
+#roomDrawings = ["SP1","SP2","SP3","SP4","SP5","SP6","SP7","SP8",
+#                "SP9","SP10","SP11","SP12"]
+roomDrawings = ["SP1_fast","SP2_fast","SP3_fast","SP4_fast","SP5_fast",
+               "SP6_fast","SP7_fast","SP8_fast","SP9_fast","SP10_fast",
+               "SP11_fast","SP12_fast"]
+
+
 roomsPainted = np.zeros(0)
 cond = 2
 
@@ -29,7 +34,7 @@ def interact(i, cond, fingers , R):
     
     if script[i] == "retreat":
         print("Retreat")
-        #playAnim(R,"retreat")
+        playAnim(R,"retreat")
     
     elif script[i] == "wander":
         print("Wander")
@@ -211,11 +216,26 @@ if __name__ == '__main__':
             img = queueImg.get(timeout = 1000)
             queue.put([-1,-1]) #fill the cue so is not updated
             print(f"Index position {f[1]}")
-            #findRoomDraw(img)
         except Exception as error:
             print(traceback.format_exc())
             break
-        #R=None
+        
+        if (cond == 2 and script[i] == "draw"): # check if the fingers are over a room that is not painted if not wait up to 20 sec
+            for j in range(20):
+                print(f"First is f {f}")
+
+                handInRoom = getHandOnRoom(f)
+                if (handInRoom in roomsPainted or handInRoom == -1 ):
+                    print(f"Waiting for room sec {j} ")
+                    queue.get()
+                    time.sleep(0.5)
+                    f = queue.get(timeout = 1)
+                    print(f"This is f {f}")
+                    queue.put([-1,-1])
+                    time.sleep(0.5)
+        
+        
+        
         interact(i, cond, f, R)
 
         time.sleep(0.2)

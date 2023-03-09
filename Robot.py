@@ -27,7 +27,7 @@ class MyRobot(URBasic.urScriptExt.UrScriptExt):
 	def __init__(self, host, app):
 		print("Robot connecting to: ", host)
 		robotModle = URBasic.robotModel.RobotModel()
-		self.robot = URBasic.urScriptExt.UrScriptExt(host=host,robotModel=robotModle)
+		self.robot = URBasic.urScriptExt.UrScriptExt(host=host,robotModel=robotModle,  hasForceTorque=True)
 		self.robot.reset_error()
 
 		#TO DO: SLOW DOWN THIS KILLING MACHINE SOMEHOW
@@ -402,6 +402,7 @@ class MyRobot(URBasic.urScriptExt.UrScriptExt):
 
 		for pose in animationPose:
 			time.sleep(0.185)
+            #time.sleep(0.001)
 			if(self.ui.isAnimationPlaying == False):
 				return "Interrupted"
 			if(tabletData):

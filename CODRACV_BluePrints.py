@@ -111,7 +111,7 @@ script = ["retreat", "wander", "room", "room", "wander", "room", "room",
           "wander", "room", "room", "wander", "room", "retreat"]
 
 roomDrawings = ["BP1","BP2","BP3","BP4","BP5","BP6","BP7"]
-roomsPainted = np.zeros(1)
+roomsPainted = np.zeros(0)
 
 # i = iteration;  cond = condition;  fingers = f data; R = robot
 #   
@@ -155,7 +155,7 @@ def drawCond1(R, HandOnRoom):
     if(roomsPainted.size == 7): return -1
     
     if -1 < HandOnRoom <= 3:
-        if false in np.in1d(roomsPainted, [4,5,6,7]):
+        if False in np.in1d(roomsPainted, [4,5,6,7]):
             drawRandRoom(R)
             return 0
         else:            
@@ -164,7 +164,7 @@ def drawCond1(R, HandOnRoom):
                 room = randint(4,7)
         
     if HandOnRoom > 4:
-        if false in np.in1d(roomsPainted, [1,2,3,4]):
+        if False in np.in1d(roomsPainted, [1,2,3,4]):
             drawRandRoom(R)
             return 0
         else:
@@ -172,12 +172,12 @@ def drawCond1(R, HandOnRoom):
             while (room in roomsPainted) :
                 room = randint(1,4)
     if HandOnRoom == 4:
-        if not(false in np.in1d(roomsPainted, [1,2,3,5,6,7])):
+        if not(False in np.in1d(roomsPainted, [1,2,3,5,6,7])):
             room = 4
         else:
             room = randint(1,7)
             while(room ==  4 or room in roomsPainted):
-                room = rand(1,7)
+                room = randint(1,7)
 
     playDrawing(R,roomDrawings[room-1])
     roomsPainted = np.append(roomsPainted, room)
@@ -217,9 +217,9 @@ if __name__ == '__main__':
     
     app = QApplication(sys.argv)
     R = CODRACVTest.App()
-
+     
     #clear buffer
-    queue.get(timeout = 1) # finger data
+    queue.get(timeout = 10) # finger data
     time.sleep(0.5)
     f = queue.get(timeout = 1)
 
@@ -233,8 +233,25 @@ if __name__ == '__main__':
             print(f"Index position {f[1]}")
         except Empty as error:
             break
-        interact(i, cond, f, R)
+        
+        if (cond == 2 and script[i] == "draw"): # check if the fingers are over a room that is not painted if not wait up to 20 sec
+            for j in range(20):
+                print(f"First is f {f}")
 
+                handInRoom = getHandOnRoom(f)
+                if (handInRoom in roomsPainted or handInRoom == -1 ):
+                    print(f"Waiting for room sec {j} ")
+                    queue.get()
+                    time.sleep(0.5)
+                    f = queue.get(timeout = 1)
+                    print(f"This is f {f}")
+                    queue.put([-1,-1])
+                    time.sleep(0.5)
+
+                else:
+                    break
+            
+        interact(i, cond, f, R)                    
         time.sleep(0.2)
         queue.get()
         i+=1
