@@ -94,3 +94,14 @@ Keep the touch pendant close if an emergency stop is needed. You can reset posib
 
 To make it easier you can create your own buttons on App.py to launch one or more animations. Use the buttons Greet, Draw Random, Contemplate, etc as an example.
 
+
+
+
+# CODRA - CV Colaborative Drawing assisted by Computer Vision
+
+This a spin off EMCAR, that allow to automate the interaction based on the position of the hand of the human and the drawing
+
+It uses a kinect azure camera and the library PyK4A.
+
+## Calibration
+Run the script 
