@@ -133,7 +133,7 @@ Using the information provided by Codracv_Main and the saved animatios using EMC
 - CODRACV_Landscape
 
 In this interactions the robot waits for the human to draw in a part of the canvas and then proceed to draw one of the prerecorded drawings close to the hand of the participant.
-Use them as templates. In the data folder rename the files with sufix _experiment to make their animations active.
+Use them as templates. In the data folder rename the files with sufix experiment to make their animations active. In the file Experiments.pfd you can find more info about them.
 
 The script DemoFollowHand.py is an example that only uses the hand position and follows their index finger. Use it to troubleshoot that your canvas in the camera and robot are aligned. Use this script with discrection, you don't want your finger pierced.
 
